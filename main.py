@@ -1,8 +1,8 @@
 # main.py
 
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
@@ -13,13 +13,6 @@ import os
 load_dotenv()
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="."), name="static")
-
-
-@app.get("/app")
-def serve_frontend():
-    return FileResponse("index.html")
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -28,11 +21,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = Groq(api_key=os.getenv(
-    "dental-receptionist"))
+app.mount("/static", StaticFiles(directory="."), name="static")
 
-# Load clinic data when the server starts
-# Later this will be dynamic — for now we load one clinic
+# Fix: correctly read the API key and create the client
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+
+@app.get("/app")
+def serve_frontend():
+    return FileResponse("index.html")
 
 
 @app.on_event("startup")
@@ -57,26 +54,30 @@ def root():
 @app.post("/chat")
 def chat(request: ChatRequest):
 
-    # Step 1: Search clinic data for relevant context
     relevant_chunks = search_clinic_data(request.clinic_id, request.message)
 
-    # Step 2: Build context string from search results
     if relevant_chunks:
         context = "\n\n".join(relevant_chunks)
-    else:
-        context = "No specific information found for this query."
+        system_prompt = f"""You are a friendly and helpful dental clinic receptionist chatbot.
 
-    # Step 3: Build the system prompt with real clinic data injected
-    system_prompt = f"""You are a friendly receptionist chatbot for a dental clinic.
-Answer the patient's question using ONLY the clinic information provided below.
-If the answer is not in the information, say "I don't have that information, 
-please call us directly."
-Be warm, concise, and helpful.
+You have two jobs:
+1. Answer questions about this specific clinic using the information below
+2. Answer general dental or health questions, and handle normal conversation naturally
 
 CLINIC INFORMATION:
-{context}"""
+{context}
 
-    # Step 4: Call Groq with the context-aware prompt
+Rules:
+- For clinic-specific questions (hours, doctors, services, prices, location), use ONLY the clinic info above
+- For general questions (dental tips, what is a root canal, how to brush teeth, greetings, small talk), answer helpfully from your own knowledge
+- Always be warm, friendly and professional
+- Never make up clinic-specific details not in the clinic info"""
+
+    else:
+        system_prompt = """You are a friendly dental clinic receptionist chatbot.
+Answer general dental questions, give helpful advice, and have natural conversations.
+Be warm, friendly and professional."""
+
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[
@@ -88,8 +89,6 @@ CLINIC INFORMATION:
 
     reply = response.choices[0].message.content
     return {"reply": reply, "clinic_id": request.clinic_id}
-
-# Endpoint to load new clinic data (we'll use this more in Phase 3)
 
 
 @app.post("/load-data/{clinic_id}")
