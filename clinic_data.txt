@@ -1,0 +1,47 @@
+
+CLINIC NAME: Bright Smile Dental Clinic
+LOCATION: 123 Main Street, Karachi, Pakistan
+PHONE: +92-21-1234567
+EMAIL: info@brightsmile.com
+
+OPENING HOURS:
+Monday to Friday: 9:00 AM to 7:00 PM
+Saturday: 10:00 AM to 4:00 PM
+Sunday: Closed
+
+DOCTORS:
+Dr. Sarah Ahmed - Lead Dentist, 10 years experience, specializes in cosmetic dentistry
+Dr. Usman Khan - Orthodontist, specializes in braces and aligners
+Dr. Fatima Malik - Pediatric Dentist, specializes in children's dental care
+
+SERVICES:
+- General checkup and cleaning: Rs. 1,500
+- Teeth whitening: Rs. 8,000
+- Braces consultation: Rs. 2,000
+- Root canal treatment: Rs. 12,000
+- Tooth extraction: Rs. 3,000
+- Pediatric dental checkup: Rs. 1,200
+- Dental X-ray: Rs. 1,000
+
+APPOINTMENT BOOKING:
+Patients can book by calling our number or walking in.
+Same-day appointments available for emergencies.
+Please arrive 10 minutes early for your first visit.
+
+INSURANCE:
+We accept Jubilee Insurance and EFU Health Insurance.
+Payment accepted via cash, card, and bank transfer.
+
+FREQUENTLY ASKED QUESTIONS:
+Q: Is parking available?
+A: Yes, free parking is available for all patients.
+
+Q: Do you treat children?
+A: Yes, Dr. Fatima Malik specializes in pediatric dentistry for children of all ages.
+
+Q: How long does a cleaning take?
+A: A standard cleaning takes 30-45 minutes.
+
+QTime required in Scaling?
+A: 1 hour 20 minutes.
+
